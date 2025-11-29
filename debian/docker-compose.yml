@@ -17,6 +17,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      - default
 
   nginx:
     image: nginx:alpine
@@ -28,6 +30,8 @@ services:
     depends_on:
       app:
         condition: service_healthy
+    networks:
+      - default
 
   mysql:
     image: mysql:8
@@ -50,6 +54,8 @@ services:
           "-u${MYSQL_USER}",
           "-p${MYSQL_PASSWORD}",
         ]
+    networks:
+      - default
 
   redis:
     image: redis:alpine
@@ -58,6 +64,8 @@ services:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
+    networks:
+      - default
 
 volumes:
   app_public:
@@ -68,3 +76,7 @@ volumes:
     driver: local
   redis_data:
     driver: local
+
+networks:
+  default:
+    driver: bridge
